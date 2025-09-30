@@ -19,7 +19,10 @@ class TestDataLoader(unittest.TestCase):
         """Test DataLoader initialization."""
         # Write tests for DataLoader initialization
         # Check correct values of filepath and is_processed properties
-        pass
+        loader = DataLoader("example_CSVs/311_Cases_SF_Sample.csv")
+        loader_data = loader.load_and_explore_data()
+        self.assertEqual(False, loader.is_processed)
+        self.assertEqual("example_CSVs/311_Cases_SF_Sample.csv", loader.filepath)
 
     def test_load_and_explore_data_success(self) -> None:
         """Test successful data loading."""
@@ -92,21 +95,20 @@ class TestDataLoader(unittest.TestCase):
 
 
     def test_load_nonexistent_file(self) -> None:
-        """Test loading non-existent file."""
-        # Write test for loading non-existent file
-        pass
+        """Test loading nonexistent file."""
+        loader = DataLoader("dslkjdspfdsyaoi")
+        with self.assertRaises(FileNotFoundError): loader.load_and_explore_data()
 
     def test_load_bad_file_format(self) -> None:
         """Test loading file with bad format."""
-        # Write test for loading file with bad format,
-        # using the provided bad_file_format.zip file.
-        pass
+        loader = DataLoader("example_CSVs/bad_file_format.zip")
+        with self.assertRaises(ValueError): loader.load_and_explore_data()
 
     def test_validate_required_columns_missing(self) -> None:
         """Test column validation with missing required columns."""
-        # Write test for loading a csv with missing required columns,
-        # using the provided 311_Cases_missing_CaseID.csv file.
-        pass
+        loader = DataLoader("example_CSVs/311_Cases_missing_CaseID.csv")
+        with self.assertRaises(KeyError): loader.load_and_explore_data()
+    
 
     def test_get_basic_stats_without_loading(self) -> None:
         """Test getting stats before loading data."""
